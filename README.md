@@ -133,7 +133,7 @@ Includes fallback handling to prevent raw JSON exposure.
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/fleetinsight-ai.git
+git clone https://github.com/AniketDeshpande-23/Fleetinsight-ai-RAG-Tool-.git
 cd fleetinsight-ai
 ```
 
