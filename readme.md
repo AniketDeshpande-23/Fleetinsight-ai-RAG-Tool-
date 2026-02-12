@@ -1,120 +1,208 @@
 🚚 FleetInsight AI
-Intelligent Logistics Analytics Assistant (RAG + Smart Dashboard)
+Retrieval-Augmented Logistics Intelligence Assistant (RAG + Smart Dashboard)
 
-FleetInsight AI is a Retrieval-Augmented Generation (RAG) based analytics system that enables natural language querying over structured logistics operations data.
 
-It combines semantic retrieval, a local LLM, and dynamic UI rendering to transform raw operational datasets into actionable business insights.
 
-🎯 Project Overview
 
-This project demonstrates how enterprises can build AI-powered analytics assistants over internal operational databases such as:
 
-Drivers
 
-Trips
 
-Trucks
 
-Fuel Purchases
 
-Safety Incidents
 
-Delivery Events
+FleetInsight AI is an end-to-end Retrieval-Augmented Generation (RAG) system that enables natural language querying over structured logistics operations data.
 
-Instead of manually writing SQL queries, users can ask natural language questions and receive:
+It combines semantic search (FAISS + MiniLM embeddings) with a local LLM (Ollama – Mistral) and dynamically renders responses as structured tables, charts, or executive summaries.
 
-📋 Structured tables
+🎯 Why This Project
 
-📊 Intelligent charts
+Enterprise logistics data is typically stored in structured tables requiring SQL expertise to analyze.
 
-🧠 Operational summaries
+FleetInsight AI allows users to:
 
-The system automatically decides the best visualization format based on the query.
+Ask operational questions in natural language
 
-🧠 Core Capabilities
-🔎 Retrieval-Augmented Generation (RAG)
+Automatically retrieve relevant context
 
-Semantic search using FAISS
+Generate structured insights
 
-Document embeddings via MiniLM-L6-v2
+Visualize results dynamically
 
-Context-aware answers using a local LLM (Ollama – Mistral)
+No SQL required.
 
-📊 Intelligent UI Rendering
-
-The assistant dynamically selects output format:
-
-Query Type	Output
-Multiple records	Data table
-Numeric trends	Line/Bar chart
-Explanatory queries	Structured summary
-🏢 Enterprise Simulation
-
-Built using a realistic logistics operations dataset to simulate enterprise-grade analytics use cases.
-
-🏗 Architecture
+🧠 System Architecture
 User Query
    ↓
-Semantic Retriever (FAISS + MiniLM Embeddings)
+FAISS Semantic Retriever
    ↓
-Context Injection
+Top-K Relevant Context
    ↓
 Local LLM (Ollama - Mistral)
    ↓
 Structured JSON Output
    ↓
-Dynamic Streamlit Renderer (Table / Chart / Summary)
+Dynamic Streamlit Rendering
+      → Table
+      → Chart
+      → Summary
 
-📂 Project Structure
-fleetinsight-ai/
-│
-├── app.py                # Streamlit UI + Smart Rendering
-├── rag_pipeline.py       # RAG logic + Structured Output
-├── ingest.py             # FAISS index builder
-├── prepare_data.py       # Converts structured tables to text docs
-├── data/                 # Logistics datasets
-├── vector_store/         # Generated FAISS index
-└── requirements.txt
+⚙️ How It Works
+1️⃣ Data Preparation
 
-⚙️ Setup Instructions
-1️⃣ Clone the repository
-git clone https://github.com/yourusername/fleetinsight-ai.git
+prepare_data.py
+
+Converts structured CSV/Excel files into text documents
+
+Limits rows for efficient embedding
+
+Prepares data for semantic indexing
+
+2️⃣ Vector Indexing
+
+ingest.py
+
+Generates embeddings using:
+
+sentence-transformers/all-MiniLM-L6-v2
+
+Stores vectors in FAISS
+
+Enables fast similarity search
+
+3️⃣ Retrieval-Augmented Generation
+
+rag_pipeline.py
+
+Loads FAISS vector store
+
+Retrieves top-k relevant chunks
+
+Injects context into prompt
+
+Queries local LLM via Ollama
+
+Returns structured JSON output
+
+Example structured response:
+
+{
+  "type": "table",
+  "title": "Accidents by Location",
+  "summary": "Accident count grouped by city.",
+  "data": [
+    {"City": "Chicago", "Incident Count": 4}
+  ]
+}
+
+4️⃣ Smart UI Rendering
+
+app.py
+
+The UI automatically decides how to display output:
+
+Response Type	UI Behavior
+table	Renders DataFrame with KPI metrics
+chart	Renders Line or Bar chart
+summary	Displays structured insight
+
+Includes fallback logic to prevent raw JSON exposure.
+
+✨ Key Features
+
+✔ Retrieval-Augmented Generation (RAG)
+✔ Local LLM (No API cost)
+✔ FAISS vector search
+✔ Structured JSON output
+✔ Dynamic visualization rendering
+✔ Graceful error handling
+✔ Enterprise-style dashboard
+
+📊 Example Queries
+
+Which driver has the highest number of safety incidents?
+
+Show monthly fuel purchase trends.
+
+Compare accident counts by city.
+
+Which truck required the most maintenance?
+
+List inactive customers.
+
+🚀 Installation
+1️⃣ Clone Repository
+git clone https://github.com/YOUR_USERNAME/fleetinsight-ai.git
 cd fleetinsight-ai
 
-2️⃣ Create a virtual environment
+2️⃣ Create Virtual Environment
 python -m venv venv
 venv\Scripts\activate
 
-3️⃣ Install dependencies
+3️⃣ Install Dependencies
 pip install -r requirements.txt
 
-4️⃣ Install Ollama and pull model
+4️⃣ Install Ollama & Pull Model
 
 Download Ollama:
 https://ollama.com
 
 ollama pull mistral
 
-5️⃣ Prepare dataset
-python prepare_data.py
+5️⃣ Prepare Dataset
 
-6️⃣ Build vector index
+Place dataset files inside:
+
+data/
+
+
+Then run:
+
+python prepare_data.py
 python ingest.py
 
-7️⃣ Run application
+6️⃣ Launch Application
 streamlit run app.py
 
-💬 Example Queries
 
-Which driver has the highest number of safety incidents?
+Open:
 
-What are the most frequent delivery routes?
+http://localhost:8501
 
-Which truck required the most maintenance?
+📁 Project Structure
+fleetinsight-ai/
+│
+├── app.py
+├── rag_pipeline.py
+├── ingest.py
+├── prepare_data.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── data/ (not included)
 
-Show monthly fuel purchase trends.
+📌 Design Decisions
 
-Which facilities handle the highest trip volume?
+MiniLM-L6-v2 chosen for lightweight, efficient embeddings
+
+FAISS selected for high-performance vector similarity search
+
+Ollama (Mistral) used for cost-efficient local LLM inference
+
+Structured JSON output ensures UI reliability
+
+Fallback handling prevents raw response exposure
+
+🔮 Future Enhancements
+
+Hybrid SQL + RAG querying
+
+Multi-turn conversation memory
+
+KPI summary dashboard
+
+Dockerized deployment
+
+Cloud deployment option
 
 🛠 Tech Stack
 
@@ -124,34 +212,10 @@ LangChain
 
 FAISS
 
-sentence-transformers (MiniLM)
+sentence-transformers
 
-Ollama (Mistral LLM)
+Ollama
 
 Streamlit
 
 Pandas
-
-🚀 Why This Project Matters
-
-FleetInsight AI demonstrates:
-
-Practical implementation of Retrieval-Augmented Generation
-
-Structured LLM output for reliable UI integration
-
-Enterprise-style analytics over operational datasets
-
-Cost-efficient local LLM deployment (no API costs)
-
-It reflects real-world AI system design for logistics and supply chain intelligence.
-
-📈 Future Improvements
-
-KPI metric dashboard
-
-Downloadable reports
-
-Hybrid SQL + RAG querying
-
-Multi-turn conversational memory
