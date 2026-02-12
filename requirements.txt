@@ -1,0 +1,10 @@
+streamlit
+pandas
+openpyxl
+faiss-cpu
+sentence-transformers
+torch
+langchain
+langchain-core
+langchain-community
+langchain-huggingface
