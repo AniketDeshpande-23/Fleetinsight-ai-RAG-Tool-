@@ -1,4 +1,4 @@
-# 🚚 FleetInsight AI  
+#  FleetInsight AI  
 ### Retrieval-Augmented Logistics Intelligence Assistant (RAG + Smart Dashboard)
 
 FleetInsight AI is an end-to-end **Retrieval-Augmented Generation (RAG)** system that enables natural language querying over structured logistics operations data.
@@ -7,7 +7,7 @@ It combines semantic search (**FAISS + MiniLM embeddings**) with a local LLM (**
 
 ---
 
-## 🎯 Why This Project
+##  Why This Project
 
 Enterprise logistics data is typically stored in structured tables requiring SQL expertise to analyze.
 
@@ -21,7 +21,7 @@ FleetInsight AI allows users to:
 
 ---
 
-## 🧠 System Architecture
+##  System Architecture
 
 ```text
 User Query
@@ -42,9 +42,9 @@ Dynamic Streamlit Rendering
 
 ---
 
-## ⚙️ How It Works
+##  How It Works
 
-### 1️⃣ Data Preparation
+### 1️ Data Preparation
 
 **File:** `prepare_data.py`
 
@@ -54,7 +54,7 @@ Dynamic Streamlit Rendering
 
 ---
 
-### 2️⃣ Vector Indexing
+### 2️ Vector Indexing
 
 **File:** `ingest.py`
 
@@ -65,7 +65,7 @@ Dynamic Streamlit Rendering
 
 ---
 
-### 3️⃣ Retrieval-Augmented Generation
+### 3️ Retrieval-Augmented Generation
 
 **File:** `rag_pipeline.py`
 
@@ -90,7 +90,7 @@ Example structured response:
 
 ---
 
-### 4️⃣ Smart UI Rendering
+### 4️ Smart UI Rendering
 
 **File:** `app.py`
 
@@ -106,7 +106,7 @@ Includes fallback handling to prevent raw JSON exposure.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 - Retrieval-Augmented Generation (RAG)
 - Local LLM (No API cost)
@@ -118,7 +118,7 @@ Includes fallback handling to prevent raw JSON exposure.
 
 ---
 
-## 📊 Example Queries
+##  Example Queries
 
 - Which driver has the highest number of safety incidents?
 - Show monthly fuel purchase trends.
@@ -128,29 +128,29 @@ Includes fallback handling to prevent raw JSON exposure.
 
 ---
 
-## 🚀 Installation
+##  Installation
 
-### 1️⃣ Clone Repository
+### 1️ Clone Repository
 
 ```bash
 git clone https://github.com/AniketDeshpande-23/Fleetinsight-ai-RAG-Tool-.git
 cd fleetinsight-ai
 ```
 
-### 2️⃣ Create Virtual Environment
+### 2️ Create Virtual Environment
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-### 3️⃣ Install Dependencies
+### 3️ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Install Ollama & Pull Model
+### 4️ Install Ollama & Pull Model
 
 Download Ollama from: https://ollama.com
 
@@ -158,7 +158,7 @@ Download Ollama from: https://ollama.com
 ollama pull mistral
 ```
 
-### 5️⃣ Prepare Dataset
+### 5️ Prepare Dataset
 
 Place dataset files inside:
 
@@ -173,7 +173,7 @@ python prepare_data.py
 python ingest.py
 ```
 
-### 6️⃣ Launch Application
+### 6️ Launch Application
 
 ```bash
 streamlit run app.py
@@ -187,7 +187,7 @@ http://localhost:8501
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Component | Technology |
 |-----------|------------|
@@ -200,7 +200,7 @@ http://localhost:8501
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 fleetinsight-ai/
@@ -217,7 +217,7 @@ fleetinsight-ai/
 
 ---
 
-## 📌 Design Decisions
+##  Design Decisions
 
 - MiniLM-L6-v2 selected for lightweight embeddings  
 - FAISS chosen for high-performance semantic search  
@@ -227,7 +227,7 @@ fleetinsight-ai/
 
 ---
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
 - Hybrid SQL + RAG querying  
 - Multi-turn conversational memory  
