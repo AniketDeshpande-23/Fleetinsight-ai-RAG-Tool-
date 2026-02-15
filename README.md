@@ -1,4 +1,14 @@
 #  FleetInsight AI  
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![RAG](https://img.shields.io/badge/Architecture-RAG-purple)
+![LLM](https://img.shields.io/badge/LLM-Ollama%20(Mistral)-orange)
+![Vector DB](https://img.shields.io/badge/VectorDB-FAISS-blueviolet)
+![Embeddings](https://img.shields.io/badge/Embeddings-MiniLM--L6--v2-green)
+![Framework](https://img.shields.io/badge/Framework-LangChain-lightgrey)
+![Frontend](https://img.shields.io/badge/UI-Streamlit-ff4b4b?logo=streamlit&logoColor=white)
+![Deployment](https://img.shields.io/badge/Deployment-Local-yellow)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
 ### Retrieval-Augmented Logistics Intelligence Assistant (RAG + Smart Dashboard)
 
 FleetInsight AI is an end-to-end **Retrieval-Augmented Generation (RAG)** system that enables natural language querying over structured logistics operations data.
