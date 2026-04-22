@@ -6,3 +6,6 @@ vector_store/
 .DS_Store
 temp.xlsx
 Changes_Done.docx
+.agents/
+graphify-out/
+data/
