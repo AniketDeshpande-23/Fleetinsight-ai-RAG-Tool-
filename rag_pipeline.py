@@ -3,7 +3,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.llms import Ollama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import JsonOutputParser
 
 VECTOR_PATH = "vector_store/"
 
@@ -28,6 +28,9 @@ def load_qa_chain():
         temperature=0.1  # Lower temp = more consistent JSON
     )
 
+    # Use JsonOutputParser for robust extraction
+    parser = JsonOutputParser()
+
     # 🔥 Structured JSON Prompt
     prompt = ChatPromptTemplate.from_template("""
 You are FleetInsight AI, a logistics intelligence assistant.
@@ -41,7 +44,7 @@ Do NOT include explanations outside JSON.
 Return output in this structure:
 
 {{
-  "type": "table | chart | summary",
+  "type": "table" | "chart" | "summary",
   "title": "Short descriptive title",
   "summary": "Brief explanation",
   "data": [
@@ -79,7 +82,8 @@ Question:
         }
         | prompt
         | llm
-        | StrOutputParser()
+        | parser
     )
 
     return rag_chain
+

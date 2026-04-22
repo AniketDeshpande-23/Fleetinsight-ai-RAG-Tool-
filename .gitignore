@@ -4,3 +4,5 @@ vector_store/
 *.pyc
 .env
 .DS_Store
+temp.xlsx
+Changes_Done.docx

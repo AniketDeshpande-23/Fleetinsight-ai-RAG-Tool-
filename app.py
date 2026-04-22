@@ -33,115 +33,93 @@ with st.sidebar:
     """)
     st.write("Built for logistics & supply chain intelligence.")
 
-# Main Input Section
-query = st.text_input("🔎 Ask a logistics question:")
+# Chat history initialization
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-if st.button("Generate Insight"):
-    if query:
-        with st.spinner("Analyzing operations data..."):
-            response = qa_chain.invoke(query)
-
-        st.success("📊 Analysis Complete")
-        st.markdown("### 🚚 FleetInsight Analysis")
-
-        response = response.strip()
-
-        # ----------------------------------------------------
-        # 1️⃣ Detect if response looks like JSON
-        # ----------------------------------------------------
-        if response.startswith("{"):
-
-            # Attempt JSON parsing
-            try:
-                result = json.loads(response)
-
-            except:
-                # Try cleaning common formatting issues
-                try:
-                    cleaned = response.replace("```json", "").replace("```", "")
-                    result = json.loads(cleaned)
-                except:
-                    result = None
-
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        if message["role"] == "user":
+            st.markdown(message["content"])
+        else:
+            # Display assistant messages (which could be text or parsed JSON)
+            result = message.get("result")
             if result:
                 title = result.get("title", "Operational Insight")
                 summary = result.get("summary", "")
                 data_type = result.get("type", "summary")
                 data = result.get("data", [])
 
-                st.markdown(f"## {title}")
-
+                st.markdown(f"### {title}")
                 if summary:
                     st.info(summary)
-
-                # -----------------------------
-                # TABLE RENDERING
-                # -----------------------------
+                
+                # Table rendering
                 if data_type == "table" and data:
                     df = pd.DataFrame(data)
-
-                    # Clean column names
-                    df.columns = [
-                        col.replace("_", " ").title() for col in df.columns
-                    ]
-
-                    # KPI cards for numeric columns
-                    numeric_cols = df.select_dtypes(
-                        include=["int64", "float64"]
-                    ).columns
-
-                    if len(numeric_cols) > 0:
-                        cols = st.columns(len(numeric_cols))
-                        for i, col in enumerate(numeric_cols):
-                            cols[i].metric(
-                                label=col,
-                                value=round(df[col].sum(), 2)
-                            )
-
-                    st.markdown("### 📋 Detailed Data")
+                    df.columns = [str(col).replace("_", " ").title() for col in df.columns]
                     st.dataframe(df, use_container_width=True)
-
-                # -----------------------------
-                # CHART RENDERING
-                # -----------------------------
+                
+                # Chart rendering
                 elif data_type == "chart" and data:
                     df = pd.DataFrame(data)
-                    df.columns = [
-                        col.replace("_", " ").title() for col in df.columns
-                    ]
-
-                    st.markdown("### 📈 Trend Analysis")
-
-                    numeric_cols = df.select_dtypes(
-                        include=["int64", "float64"]
-                    ).columns
-
+                    numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns
                     if len(numeric_cols) >= 1:
                         index_col = df.columns[0]
                         df = df.set_index(index_col)
-
-                        if len(numeric_cols) > 1:
-                            st.bar_chart(df)
-                        else:
-                            st.line_chart(df)
+                        st.bar_chart(df)
                     else:
                         st.dataframe(df, use_container_width=True)
-
-                else:
-                    st.markdown("### 🧠 Insight")
-                    st.write(summary)
-
             else:
-                # JSON failed completely → fallback to clean text
-                st.markdown("### 🧠 Insight")
-                st.write(response)
+                st.markdown(message["content"])
 
-        # ----------------------------------------------------
-        # 2️⃣ If NOT JSON → treat as normal text
-        # ----------------------------------------------------
-        else:
-            st.markdown("### 🧠 Insight")
-            st.write(response)
+# Main Input Section
+if query := st.chat_input("🔎 Ask a logistics question:"):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": query})
+    with st.chat_message("user"):
+        st.markdown(query)
+
+    with st.chat_message("assistant"):
+        with st.spinner("Analyzing operations data..."):
+            try:
+                # Invoke RAG chain, which returns a dict thanks to JsonOutputParser
+                result = qa_chain.invoke(query)
+                
+                # Render it
+                title = result.get("title", "Operational Insight")
+                summary = result.get("summary", "")
+                data_type = result.get("type", "summary")
+                data = result.get("data", [])
+
+                st.markdown(f"### {title}")
+                if summary:
+                    st.info(summary)
+
+                # Table rendering
+                if data_type == "table" and data:
+                    df = pd.DataFrame(data)
+                    df.columns = [str(col).replace("_", " ").title() for col in df.columns]
+                    st.dataframe(df, use_container_width=True)
+                
+                # Chart rendering
+                elif data_type == "chart" and data:
+                    df = pd.DataFrame(data)
+                    numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns
+                    if len(numeric_cols) >= 1:
+                        index_col = df.columns[0]
+                        df = df.set_index(index_col)
+                        st.bar_chart(df)
+                    else:
+                        st.dataframe(df, use_container_width=True)
+                
+                st.session_state.messages.append({"role": "assistant", "content": summary, "result": result})
+
+            except Exception as e:
+                error_msg = f"Sorry, I couldn't process that structure. Try rephrasing your question."
+                st.error(error_msg)
+                st.session_state.messages.append({"role": "assistant", "content": error_msg, "result": None})
 
 st.divider()
 

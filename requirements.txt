@@ -8,3 +8,4 @@ langchain
 langchain-core
 langchain-community
 langchain-huggingface
+python-docx
