@@ -1,11 +1,17 @@
 venv/
 __pycache__/
+**/__pycache__/
 vector_store/
 *.pyc
 .env
+.env.local
 .DS_Store
 temp.xlsx
 Changes_Done.docx
 .agents/
+.claude/
 graphify-out/
 data/
+frontend/AGENTS.md
+frontend/CLAUDE.md
+frontend/README.md
