@@ -167,6 +167,33 @@ Open `http://localhost:3000` — API docs at `http://localhost:8001/docs`.
 
 ---
 
+## Docker
+
+Requires Docker Desktop. Ollama must run on the host (containers connect via `host.docker.internal:11434`).
+
+```bash
+# 1. Build datasets and vector index (run once, outside Docker)
+pip install requests pandas numpy sentence-transformers faiss-cpu langchain langchain-community langchain-huggingface torch
+python data/download_real_data.py
+python prepare_data.py
+python ingest.py
+
+# 2. Configure environment
+cp .env.example .env
+
+# 3. Build and start
+docker compose up --build
+```
+
+| Service | Port | URL |
+|---|---|---|
+| Frontend | 3000 | http://localhost:3000 |
+| Backend API | 8001 | http://localhost:8001/docs |
+
+`vector_store/` and `data/` are mounted as volumes — not baked into the image.
+
+---
+
 ## Email Connectors
 
 Set `EMAIL_PROVIDER` in `.env`:
